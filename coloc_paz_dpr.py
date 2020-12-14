@@ -9,27 +9,18 @@ maxd_deg = 2.0
 paz_df = pd.read_csv('PAZ.csv')
 dpr_df = pd.read_csv('DPR.csv')
 
-# read the paz time from the file name
-paz_fn = paz_df['file'].str.split('.',expand=True)
-
-paz_year  = pd.DataFrame({'year': paz_fn.iloc[:,1].astype('int32'), 'month': 1, 'day': 1})
-paz_year1 = pd.to_datetime(paz_year)
-paz_doy   = pd.to_timedelta(paz_fn.iloc[:,2].astype('int32')-1,'D')
-paz_hour  = pd.to_timedelta(paz_fn.iloc[:,3].astype('int32'),'h')
-paz_min   = pd.to_timedelta(paz_fn.iloc[:,4].astype('int32'),'m')
-paz_time  = paz_year1 + paz_doy + paz_hour + paz_min
-
+paz_time  = pd.to_datetime({'year': paz_df['year'], 'month': paz_df['month'],
+    'day': paz_df['day'], 'hour': paz_df['hour'], 'minute': paz_df['minute'],
+    'second':paz_df['second']})
 paz_df['time'] = paz_time
 
-# dpr time is included in the file
 dpr_time  = pd.to_datetime({'year': dpr_df['year'], 'month': dpr_df['month'],
     'day': dpr_df['day'], 'hour': dpr_df['hour'], 'minute': dpr_df['minute'],
     'second':dpr_df['second']})
-
 dpr_df['time'] = dpr_time
 
 # print header information
-print('PAZ_file,DPR_orbit,DPR_scan,PAZ_lat,DPR_lat,PAZ_lon,DPR_lon,PAZ_time,DPR_time')
+print('PAZ_file,DPR_orbit,DPR_scan,PAZ_lat,DPR_lat,PAZ_lon,DPR_lon,PAZ_Precip,DPR_Precip,PAZ_time,DPR_time')
 
 for index, row in paz_df.iterrows():
     # mask points within the maximum time delta
@@ -47,5 +38,5 @@ for index, row in paz_df.iterrows():
         continue
     else:
         for index2, row2 in coloc.iterrows():
-            print(('{:}' + ',{:}'*2 + ',{:.4f}'*4 + ',{:}'*2).format(row['file'],row2['orbit'],row2['scan'],
-                row['lat'],row2['lat'],row['lon'],row2['lon'],row['time'],row2['time']))
+            print(('{:}' + ',{:}'*2 + ',{:.4f}'*6 + ',{:}'*2).format(row['file'],row2['orbit'],row2['scan'],
+                row['lat'],row2['lat'],row['lon'],row2['lon'],row['rr'],row2['rr'],row['time'],row2['time']))

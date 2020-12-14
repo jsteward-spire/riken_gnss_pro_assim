@@ -21,12 +21,12 @@ raw_coloc['timediff'] = timediffs
 
 new_coloc = raw_coloc.sort_values(by=['dist','timediff'])
 
-print('PAZ_file,DPR_orbit,DPR_scan,PAZ_lat,DPR_lat,PAZ_lon,DPR_lon,PAZ_time,DPR_time,dist,diff_sec')
+print('PAZ_file,DPR_orbit,DPR_scan,PAZ_lat,DPR_lat,PAZ_lon,DPR_lon,PAZ_Precip,DPR_Precip,PAZ_time,DPR_time,dist,diff_sec')
 
 for index, row in new_coloc.iterrows():
     td_sec = int(row['timediff'].total_seconds())
 
-    print(('{:},{:},{:}' + (',{:.4f}' * 4) + (',{:}' * 2) + ',{:.2f},{:}').format(
+    print(('{:},{:},{:}' + (',{:.4f}' * 6) + (',{:}' * 2) + ',{:.2f},{:}').format(
         row['PAZ_file'],row['DPR_orbit'],row['DPR_scan'],row['PAZ_lat'],row['DPR_lat'],
-        row['PAZ_lon'],row['DPR_lon'],str(row['PAZ_time']),str(row['DPR_time']),row['dist'],
-        td_sec))
+        row['PAZ_lon'],row['DPR_lon'],row['PAZ_Precip'],row['DPR_Precip'],
+        str(row['PAZ_time']),str(row['DPR_time']),row['dist'],td_sec))
